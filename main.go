@@ -33,5 +33,6 @@ func main() {
 	// }
 	QueMgr, err = models.NewQueManager(MaxWorker)
 	http.HandleFunc("/", HelloServer)
+	fmt.Println("Listening on port 8080...")
 	http.ListenAndServe(":8080", nil)
 }

@@ -9,10 +9,12 @@ type QueManager struct {
 
 // NewQueManager ...
 func NewQueManager(maxWorkers int) (*QueManager, error) {
+	log.Println("Creating Queue Manager with", maxWorkers, "workers...")
+
 	qm := &QueManager{}
 	qm.dispatcher = NewDispatcher(maxWorkers)
 	qm.dispatcher.Run()
 
-	log.Println(len(qm.dispatcher.WorkerPool), " workers started")
+	log.Println(len(qm.dispatcher.WorkerPool), "workers started")
 	return qm, nil
 }

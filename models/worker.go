@@ -32,7 +32,7 @@ func (w Worker) Start() {
 			case job := <-w.JobChannel:
 				log.Println("Starting Job")
 				// we have received a work request.
-				result, err := job.Payload.Process()
+				result, err := job.Payload.Process(nil)
 				if err != nil {
 					log.Println(err)
 				} else {

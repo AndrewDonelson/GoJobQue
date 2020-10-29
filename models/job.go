@@ -3,14 +3,20 @@ package models
 import (
 	"encoding/json"
 	"io"
+	"net/http"
 	"reflect"
 )
+
+type HTTPProcess interface {
+	ProcessParams(args map[string]interface{}) ([]byte, error)
+	ProcessHTTP(http.HandlerFunc)
+}
 
 // Payload ...
 type Payload int
 
 // Process ...
-func (p *Payload) Process() ([]byte, error) {
+func (p *Payload) Process(args map[string]interface{}) ([]byte, error) {
 	return nil, nil
 }
 
