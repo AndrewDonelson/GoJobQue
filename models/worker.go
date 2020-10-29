@@ -1,5 +1,10 @@
 package models
 
+import (
+	"fmt"
+	"log"
+)
+
 // Worker represents the worker that executes the job
 type Worker struct {
 	WorkerPool chan chan Job
@@ -25,7 +30,14 @@ func (w Worker) Start() {
 
 			select {
 			case job := <-w.JobChannel:
+				log.Println("Starting Job")
 				// we have received a work request.
+				result, err := job.Payload.Process()
+				if err != nil {
+					log.Println(err)
+				} else {
+					fmt.Println(result)
+				}
 				// if DoJobProcess()
 				// if err := job.Payload.UploadToS3(); err != nil {
 				// 	log.Errorf("Error uploading to S3: %s", err.Error())
@@ -33,6 +45,7 @@ func (w Worker) Start() {
 
 			case <-w.quit:
 				// we have received a signal to stop
+				log.Println("Quitting Job")
 				return
 			}
 		}

@@ -1,12 +1,37 @@
 package main
 
-import "os"
+import (
+	"fmt"
+	"net/http"
+	"os"
+	"strconv"
 
-var (
-	MaxWorker = os.Getenv("MAX_WORKERS")
-	MaxQueue  = os.Getenv("MAX_QUEUE")
+	"github.com/AndrewDonelson/GoJobQue/models"
 )
 
-func main() {
+// MaxWorker allow setting the maximum number of workers
+var MaxWorker int
 
+// MaxQueue allows setting the maxmimum que size
+//var MaxQueue int
+
+var QueMgr *models.QueManager
+
+func HelloServer(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
+}
+
+func main() {
+	MaxWorker, err := strconv.Atoi(os.Getenv("MAX_WORKERS"))
+	if err != nil {
+		MaxWorker = 16
+	}
+
+	// MaxQueue, err := strconv.Atoi(os.Getenv("MAX_QUEUE"))
+	// if err != nil {
+	// 	MaxQueue = 16
+	// }
+	QueMgr, err = models.NewQueManager(MaxWorker)
+	http.HandleFunc("/", HelloServer)
+	http.ListenAndServe(":8080", nil)
 }
